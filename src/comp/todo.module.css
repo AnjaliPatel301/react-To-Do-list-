@@ -1,0 +1,23 @@
+input{
+padding: 5px 15px;
+border-top-left-radius: 20px;
+margin-top: 30px;
+color:#000;
+background-color: #fff;
+outline: none;
+border: 2.3px solid rgb(243, 84, 111);
+}
+button{
+    background-color: rgb(243, 84, 111);
+     border-bottom-right-radius: 20px;
+     padding: 6.7px;
+}
+ul {
+    display: flex;
+    align-items: center;
+}
+span{
+    margin-left: 15px;
+    margin-top:20px;
+}
+
