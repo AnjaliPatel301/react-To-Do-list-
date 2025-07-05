@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import TodoCss from "./todo.module.css";
-
-
+import toast from 'react-hot-toast';
 
 function Todo() {
   
@@ -21,6 +20,11 @@ let [todoall,settodo]=useState(todotask)
 function handlesubmit(e){
   e.preventDefault();
  // console.log("task:",task)
+  if (!task.trim()) {
+    toast.error("Please add a task 😏");
+    return;
+  }
+
 
  settodo([...todoall,{classA:task,compelete:true}])
  settask(" ")
@@ -43,6 +47,17 @@ let filtervalue = copydeletecheck.filter((value,index)=>{
   settodo(filtervalue)
 }
 
+function handleEdit(id){
+let copyedittask=[...todoall]
+let edittodolist=copyedittask[id].classA
+
+let editvaluenew=prompt(`edit task :-${edittodolist}`,edittodolist)
+const edit={classA:editvaluenew,compelete:false}
+
+copyedittask.splice(id,1,edit)
+
+settodo(copyedittask)
+}
 
   return (
     <>
@@ -63,8 +78,8 @@ let filtervalue = copydeletecheck.filter((value,index)=>{
     
     { todoall.length===0? alert("no tast added😐"):
       todoall.map((item,index)=>(
-       <ul key={index} className="justify-content-between px-3 py-1">
-          <div>
+       <ul key={index} className=" align-items-center justify-content-between px-3 py-1">
+          <div className='mb-3'>
             <input type="checkbox" id="checkbox" 
              checked={item.compelete}
              onClick={()=>{
@@ -75,7 +90,14 @@ let filtervalue = copydeletecheck.filter((value,index)=>{
                     textDecoration: item.compelete ? "line-through" : "none",}}
                     >{item.classA}</span>
           </div>
-          <div><i className="bi bi-trash3" 
+          <div>
+            <i className="bi bi-pencil-square text-success px-3"
+            onClick={()=>{
+              handleEdit(index)
+            }}
+            ></i>
+
+            <i className="bi bi-trash3" 
            onClick={()=>{
             handledelete(index)
           }}
