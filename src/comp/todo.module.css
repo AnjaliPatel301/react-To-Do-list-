@@ -1,7 +1,7 @@
 input{
 padding: 5px 15px;
 border-top-left-radius: 20px;
-margin-top: 30px;
+margin-top: 10px;
 color:#000;
 background-color: #fff;
 outline: none;
@@ -21,3 +21,9 @@ span{
     margin-top:20px;
 }
 
+ol, ul {
+    padding-left: 1rem;
+}
+ul i{
+    color:rgb(243, 84, 111);
+}
