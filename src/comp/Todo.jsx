@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import TodoCss from "./todo.module.css";
 import toast from 'react-hot-toast';
+import Task from './Task';
 
 function Todo() {
   
@@ -14,36 +15,66 @@ let [task,settask]=useState(" ");
 
 let [todoall,settodo]=useState(todotask)
 
-// let [listitem,setlistitem]= useState(todotask)
+let [compeleteValue,setcompelet]=useState(" ")
+let [uncompeleteValue,setuncompelet]=useState(" ")
+let [totalTaskvalue,settotalTaskvalue]=useState(" ")
 
 
 function handlesubmit(e){
   e.preventDefault();
- // console.log("task:",task)
   if (!task.trim()) {
     toast.error("Please add a task 😏");
-    return;
+  return
   }
+  else{
+    let verifytodo=todoall.some((value,index)=>{
+    return value.classA.toLowerCase() === task.toLowerCase()
+    })
 
-
- settodo([...todoall,{classA:task,compelete:true}])
- settask(" ")
+    if(verifytodo){
+      toast.error("Task allready added ❌")
+      settask(" ")
+    }
+    else{
+       settodo([...todoall,{classA:task,compelete:false}])
+       toast.success("Task Added 🫠")
+       settask(" ")
+    }
+  }
 }
+
 
 function handlecheck(id){
   let copyCheck=[...todoall]
   copyCheck[id].compelete = !copyCheck[id].compelete;
   settodo(copyCheck)
+
+
+  let compeleteTask=copyCheck.filter((value,index)=>{
+    return value.compelete
+  })
+
+  let uncompeleteTask=copyCheck.filter((value,index)=>{
+    return !value.compelete
+  })
+
+  let totalTask=copyCheck.filter((value,index)=>{
+    return value;
+  })
+
+  setcompelet(compeleteTask.length)
+  setuncompelet(uncompeleteTask.length)
+  settotalTaskvalue(totalTask.length)
 }
 
+
 function handledelete(id){
-//  console.log(id)
 let copydeletecheck=[...todoall]
 let filtervalue = copydeletecheck.filter((value,index)=>{
   return index!==id;
     
   })
-  //console.log(filtervalue)
+  
   settodo(filtervalue)
 }
 
@@ -66,6 +97,7 @@ settodo(copyedittask)
         <div className="col-md-12">
     <div className="border border-danger-subtle px-5 py-3 rounded shadow p-3 mb-5 bg-white rounded ">
     <h2 className="text-center">To-Do App🚀</h2>
+    <Task ctask={compeleteValue} utask={uncompeleteValue} ttask={totalTaskvalue}/>
     <form action="" onSubmit={handlesubmit}>
       <div>
         <input type="text" placeholder='add task here...'
@@ -76,7 +108,7 @@ settodo(copyedittask)
       </div>
   
     
-    { todoall.length===0? alert("no tast added😐"):
+    { todoall.length===0? <p className='fs-6 text-danger'>no tast added 🤐</p>:
       todoall.map((item,index)=>(
        <ul key={index} className=" align-items-center justify-content-between px-3 py-1">
           <div className='mb-3'>
