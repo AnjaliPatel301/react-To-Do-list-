@@ -1,15 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import TodoCss from "./todo.module.css";
 import toast from 'react-hot-toast';
 import Task from './Task';
 
 function Todo() {
   
+let storedData = localStorage.getItem("todo_items");
+let todotask = [];
 
-let todotask=[
-  {classA:'bca',compelete:false},
-  {classA:'mca',compelete:false},
-];
+try {
+  todotask = storedData ? JSON.parse(storedData) : [
+    { classA: 'bca', compelete: false },
+    { classA: 'mca', compelete: false },
+  ];
+} catch (error) {
+  console.error("Invalid localStorage data, resetting...");
+  todotask = [
+    { classA: 'bca', compelete: false },
+    { classA: 'mca', compelete: false },
+  ];
+}
+
+// let todotask=localStorage.getItem("todo_items")||[
+//   {classA:'bca',compelete:false},
+//   {classA:'mca',compelete:false},
+// ];
 
 let [task,settask]=useState(" ");
 
@@ -18,7 +33,8 @@ let [todoall,settodo]=useState(todotask)
 let [compeleteValue,setcompelet]=useState(" ")
 let [uncompeleteValue,setuncompelet]=useState(" ")
 let [totalTaskvalue,settotalTaskvalue]=useState(" ")
-
+let DarkValue=useRef()
+let Darkicon=useRef()
 
 function handlesubmit(e){
   e.preventDefault();
@@ -49,23 +65,8 @@ function handlecheck(id){
   copyCheck[id].compelete = !copyCheck[id].compelete;
   settodo(copyCheck)
 
-
-  let compeleteTask=copyCheck.filter((value,index)=>{
-    return value.compelete
-  })
-
-  let uncompeleteTask=copyCheck.filter((value,index)=>{
-    return !value.compelete
-  })
-
-  let totalTask=copyCheck.filter((value,index)=>{
-    return value;
-  })
-
-  setcompelet(compeleteTask.length)
-  setuncompelet(uncompeleteTask.length)
-  settotalTaskvalue(totalTask.length)
 }
+
 
 
 function handledelete(id){
@@ -90,13 +91,51 @@ copyedittask.splice(id,1,edit)
 settodo(copyedittask)
 }
 
+useEffect(()=>{
+   let copyCheck=[...todoall]
+   let compeleteTask=copyCheck.filter((value,index)=>{
+    return value.compelete
+  })
+
+  let uncompeleteTask=copyCheck.filter((value,index)=>{
+    return !value.compelete
+  })
+
+  let totalTask=copyCheck.filter((value,index)=>{
+    return value;
+  })
+
+  setcompelet(compeleteTask.length)
+  setuncompelet(uncompeleteTask.length)
+  settotalTaskvalue(totalTask.length)
+
+  localStorage.setItem("todo_items",JSON.stringify(copyCheck))
+
+},[todoall])
+
+function handleDarkmode(){
+  let bgcolor = DarkValue.current.style.backgroundColor;
+  if(bgcolor=== "" || bgcolor==="white"){
+    DarkValue.current.style.backgroundColor="black"
+    DarkValue.current.style.color="white";
+    Darkicon.current.className="bi bi-toggle-on"
+  }
+  else{
+     DarkValue.current.style.backgroundColor="white"
+    DarkValue.current.style.color="black"
+   Darkicon.current.className="bi bi-toggle-off"
+  
+  }
+}
   return (
     <>
-    <div className="conatiner">
+   
+    <div className="conatiner" ref={DarkValue}>
       <div className="row">
         <div className="col-md-12">
-    <div className="border border-danger-subtle px-5 py-3 rounded shadow p-3 mb-5 bg-white rounded ">
-    <h2 className="text-center">To-Do App🚀</h2>
+    <div className="border  px-5 py-3 p-3  rounded ">
+      
+    <h2 className="text-center">To-Do App🚀 <i ref={Darkicon} className="bi bi-toggle-off ml-5" onClick={handleDarkmode}></i>  </h2>
     <Task ctask={compeleteValue} utask={uncompeleteValue} ttask={totalTaskvalue}/>
     <form action="" onSubmit={handlesubmit}>
       <div>
@@ -137,6 +176,7 @@ settodo(copyedittask)
        </ul>
       ))
     }
+    {/* <button className="btn btn-outline-primary w-4">Clear All Task</button> */}
     </form>
    </div>
    </div>
