@@ -27,3 +27,18 @@ ol, ul {
 ul i{
     color:rgb(243, 84, 111);
 }
+/* .button{
+    width: 100% !important;
+} */
+
+
+@media only screen and (max-width: 600px) {
+  button {
+            padding: 7.5px 9px;
+        font-size: 14px;
+    }
+  
+  input{
+    padding: 4px;
+  }
+}
