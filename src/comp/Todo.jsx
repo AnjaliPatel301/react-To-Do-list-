@@ -35,6 +35,7 @@ let [uncompeleteValue,setuncompelet]=useState(" ")
 let [totalTaskvalue,settotalTaskvalue]=useState(" ")
 let DarkValue=useRef()
 let Darkicon=useRef()
+let buttoncolor=useRef()
 
 function handlesubmit(e){
   e.preventDefault();
@@ -119,13 +120,23 @@ function handleDarkmode(){
     DarkValue.current.style.backgroundColor="black"
     DarkValue.current.style.color="white";
     Darkicon.current.className="bi bi-toggle-on"
+    buttoncolor.current.style.backgroundColor="white"
+    buttoncolor.current.style.color="black"
+
   }
   else{
      DarkValue.current.style.backgroundColor="white"
     DarkValue.current.style.color="black"
    Darkicon.current.className="bi bi-toggle-off"
+    buttoncolor.current.style.backgroundColor="black"
+  buttoncolor.current.style.color="white"
+
   
   }
+}
+
+function handleClear(){
+  settodo([])
 }
   return (
     <>
@@ -138,7 +149,7 @@ function handleDarkmode(){
     <h2 className="text-center">To-Do App🚀 <i ref={Darkicon} className="bi bi-toggle-off ml-5" onClick={handleDarkmode}></i>  </h2>
     <Task ctask={compeleteValue} utask={uncompeleteValue} ttask={totalTaskvalue}/>
     <form action="" onSubmit={handlesubmit}>
-      <div>
+      <div className=' align-items-center'>
         <input type="text" placeholder='add task here...'
         value={task}
         onChange={((e)=>settask(e.target.value))}
@@ -176,7 +187,7 @@ function handleDarkmode(){
        </ul>
       ))
     }
-    {/* <button className="btn btn-outline-primary w-4">Clear All Task</button> */}
+    <button class="btn btn-dark w-2" onClick={handleClear} ref={buttoncolor}>Clear All Task</button>
     </form>
    </div>
    </div>
